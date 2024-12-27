@@ -3,4 +3,5 @@ export class UpdateUserDto {
     lastName?: string;
     email?: string;
     phone?: string;
+    location?: { lat: number; long: number };
 }
