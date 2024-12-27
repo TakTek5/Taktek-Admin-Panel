@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Company" ALTER COLUMN "amountDue" DROP NOT NULL,
+ALTER COLUMN "amountDue" SET DEFAULT 0.0;

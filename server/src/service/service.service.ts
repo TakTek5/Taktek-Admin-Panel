@@ -13,11 +13,13 @@ export class ServiceService {
   }
 
   async findAll(): Promise<Service[]> {
-    return this.prisma.service.findMany();
+    return this.prisma.service.findMany({include: {
+      companies: true,
+    },});
   }
 
   async findOne(id: number): Promise<Service> {
-    const service = await this.prisma.service.findUnique({ where: { id } });
+    const service = await this.prisma.service.findUnique({ where: { id }, include: { companies: true }, });
     if (!service) {
       throw new NotFoundException(`Service with ID ${id} not found`);
     }

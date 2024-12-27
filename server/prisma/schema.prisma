@@ -13,58 +13,63 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ServiceProvider {
+model Company {
   id          Int       @id @default(autoincrement())
   name        String
   email       String    @unique
-  status      String
-  phone       String
-  companyName String
+  phone       String    @unique
   location    String
   serviceId   Int
-  thisPeriod  Float
+  amountDue   Float?    @default(0.0)
+  service     Service   @relation(fields: [serviceId],references: [id])
+  technicians Technician[]
+}
+
+model Technician {
+  id          Int       @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String    @unique
+  phone       String    @unique
+  photo       String
+  location    String
+  companyId   Int
+  status      Boolean   @default(true)
   reviews     Review[]
-  rating      Float
-  service     Service   @relation(fields: [serviceId], references: [id])
-  calls       Call[]
+  rating      Float?    @default(5.0)
+  company     Company   @relation(fields: [companyId], references: [id])
+  leads       Lead[]
 }
 
 model Review {
   id              Int       @id @default(autoincrement())
   description     String
-  rating          Int
-  serviceProviderId Int
-  serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+  rating          Float  @default(5.0)
+  technicianId Int
+  technician Technician @relation(fields: [technicianId], references: [id])
 }
 
 model User {
   id    Int    @id @default(autoincrement())
-  name  String
+  firstName  String
+  lastName   String
   email String @unique
-  phone String
-  calls Call[]
+  phone String @unique
+  leads Lead[]
 }
 
-model Call {
+model Lead {
   id               Int             @id @default(autoincrement())
   userId           Int
-  serviceProviderId Int
-  time             DateTime?       @default(now())
+  technicianId     Int
+  location         String
+  date             DateTime?       @default(now())
   user             User            @relation(fields: [userId], references: [id])
-  serviceProvider  ServiceProvider @relation(fields: [serviceProviderId], references: [id])
-}
-
-model Transaction {
-  id        Int      @id @default(autoincrement())
-  serviceId Int
-  time      DateTime? @default(now())
-  amount    Float
-  service   Service  @relation(fields: [serviceId], references: [id])
+  technician  Technician @relation(fields: [technicianId], references: [id])
 }
 
 model Service {
   id            Int             @id @default(autoincrement())
   serviceName   String
-  transactions  Transaction[]
-  serviceProviders ServiceProvider[]
+  companies Company[]
 }
