@@ -24,6 +24,12 @@ export class TechnicianController {
     return this.technicianService.findOne(numericId);
   }
 
+  @Get('service/:serviceId')
+  findByService(@Param('serviceId') serviceId: string) {
+    const numericId = parseInt(serviceId, 10);
+    return this.technicianService.findByService(numericId);
+  }
+
   @Put(':id')
   update(
     @Param('id') id: string,

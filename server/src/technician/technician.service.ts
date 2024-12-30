@@ -31,6 +31,13 @@ export class TechnicianService {
     return technician;
   }
 
+  async findByService(serviceId: number): Promise<Technician[]> {
+    return this.prisma.technician.findMany({
+      where: { company: { serviceId }, status: true },
+      include: { company: true, reviews: true, leads: true },
+    });
+  }
+
   async update(
     id: number,
     updateTechnicianDto: UpdateTechnicianDto,
