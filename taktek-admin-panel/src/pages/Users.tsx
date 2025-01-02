@@ -2,7 +2,7 @@ import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import ContentWraper from "../components/ContentWraper";
 import { useNavigate } from "react-router-dom";
-import { Edit, Label } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 
 const Users = () => {
   const [users, setUsers] = useState([]);

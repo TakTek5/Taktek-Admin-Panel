@@ -1,57 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ContentWraper from "../../components/ContentWraper";
-import { useNavigate, useParams } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, CircularProgress } from "@mui/material";
 import { Flip, toast } from "react-toastify";
 
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-}
-
-const EditUsers = () => {
+const CreateService = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const succesNotify = () =>
-    toast.success("User Updated", {
+    toast.success("Service Created", {
       autoClose: 2000,
       position: "bottom-right",
       theme: "colored",
       transition: Flip,
     });
   const errorNotify = () =>
-    toast.error("Failed to update the user", {
+    toast.error("Failed To Create The Service", {
       autoClose: 2000,
       position: "bottom-right",
       theme: "colored",
       transition: Flip,
     });
-  const [userInfo, setUserInfo] = useState<User>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
-
-  const getUserInfo = async () => {
-    try {
-      const data = await fetch(`http://localhost:3000/users/${id}`);
-      const result = await data.json();
-      setUserInfo(result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
-  useEffect(() => {}, [userInfo]);
 
   const fieldStyle = {
     width: "500px",
@@ -63,29 +33,21 @@ const EditUsers = () => {
   };
 
   return (
-    <ContentWraper
-      name={userInfo?.firstName + " " + userInfo?.lastName}
-      onBack={() => navigate(-1)}
-    >
+    <ContentWraper name="Create Service" onBack={() => navigate(-1)}>
       <Formik
         initialValues={{
-          firstName: userInfo.firstName,
-          lastName: userInfo.lastName,
-          email: userInfo.email,
-          phone: userInfo.phone,
+          serviceName: "",
         }}
         enableReinitialize
-        onSubmit={async (values: User, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           setLoading(true);
           setSubmitting(true);
-          setUserInfo(values);
-          const data = await fetch(`http://localhost:3000/users/${id}`, {
-            method: "PUT",
+          const data = await fetch(`http://localhost:3000/services`, {
+            method: "POST",
             body: JSON.stringify(values),
             headers: { "Content-Type": "application/json" },
           });
-
-          if (data.status === 200) {
+          if (data.status === 200 || 201) {
             succesNotify();
             setSubmitting(false);
             setTimeout(() => {
@@ -113,17 +75,18 @@ const EditUsers = () => {
               alignItems: "center",
             }}
           >
-            <Field name="firstName" style={fieldStyle} />
-            <Field name="lastName" style={fieldStyle} />
-            <Field name="email" style={fieldStyle} />
-            <Field name="phone" style={fieldStyle} />
+            <Field
+              name="serviceName"
+              style={fieldStyle}
+              placeholder="Service Name"
+            />
             <Button
               variant="contained"
               type="submit"
               size="large"
               sx={{ width: "400px", margin: "20px" }}
             >
-              Update
+              Create
             </Button>
           </Form>
         )}
@@ -132,4 +95,4 @@ const EditUsers = () => {
   );
 };
 
-export default EditUsers;
+export default CreateService;

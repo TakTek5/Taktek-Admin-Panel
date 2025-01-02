@@ -1,57 +1,50 @@
 import { useEffect, useState } from "react";
-import ContentWraper from "../../components/ContentWraper";
 import { useNavigate, useParams } from "react-router-dom";
+import ContentWraper from "../../components/ContentWraper";
 import { Field, Form, Formik } from "formik";
 import { Box, Button, CircularProgress } from "@mui/material";
 import { Flip, toast } from "react-toastify";
 
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
+interface Service {
+  id?: number;
+  serviceName: string;
+  companies?: any[];
 }
 
-const EditUsers = () => {
+const EditServices = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const succesNotify = () =>
-    toast.success("User Updated", {
-      autoClose: 2000,
-      position: "bottom-right",
-      theme: "colored",
-      transition: Flip,
-    });
-  const errorNotify = () =>
-    toast.error("Failed to update the user", {
-      autoClose: 2000,
-      position: "bottom-right",
-      theme: "colored",
-      transition: Flip,
-    });
-  const [userInfo, setUserInfo] = useState<User>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
+  const [service, setService] = useState<Service>({
+    serviceName: "",
   });
 
-  const getUserInfo = async () => {
+  const succesNotify = () =>
+    toast.success("Service Updated", {
+      autoClose: 2000,
+      position: "bottom-right",
+      theme: "colored",
+      transition: Flip,
+    });
+
+  const errorNotify = () =>
+    toast.error("Failed to update the service", {
+      autoClose: 2000,
+      position: "bottom-right",
+      theme: "colored",
+      transition: Flip,
+    });
+
+  const getServiceData = async () => {
     try {
-      const data = await fetch(`http://localhost:3000/users/${id}`);
-      const result = await data.json();
-      setUserInfo(result);
+      const data = await fetch(`http://localhost:3000/services/${id}`);
+      const response = await data.json();
+      setService(response);
+      console.log(service);
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
-  useEffect(() => {}, [userInfo]);
 
   const fieldStyle = {
     width: "500px",
@@ -62,24 +55,21 @@ const EditUsers = () => {
     borderRadius: "5px",
   };
 
+  useEffect(() => {
+    getServiceData();
+  });
   return (
-    <ContentWraper
-      name={userInfo?.firstName + " " + userInfo?.lastName}
-      onBack={() => navigate(-1)}
-    >
+    <ContentWraper name={service.serviceName} onBack={() => navigate(-1)}>
       <Formik
         initialValues={{
-          firstName: userInfo.firstName,
-          lastName: userInfo.lastName,
-          email: userInfo.email,
-          phone: userInfo.phone,
+          serviceName: service.serviceName,
         }}
         enableReinitialize
-        onSubmit={async (values: User, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           setLoading(true);
           setSubmitting(true);
-          setUserInfo(values);
-          const data = await fetch(`http://localhost:3000/users/${id}`, {
+          setService(values);
+          const data = await fetch(`http://localhost:3000/services/${id}`, {
             method: "PUT",
             body: JSON.stringify(values),
             headers: { "Content-Type": "application/json" },
@@ -113,17 +103,14 @@ const EditUsers = () => {
               alignItems: "center",
             }}
           >
-            <Field name="firstName" style={fieldStyle} />
-            <Field name="lastName" style={fieldStyle} />
-            <Field name="email" style={fieldStyle} />
-            <Field name="phone" style={fieldStyle} />
+            <Field name="serviceName" style={fieldStyle} />
             <Button
-              variant="contained"
               type="submit"
+              variant="contained"
               size="large"
               sx={{ width: "400px", margin: "20px" }}
             >
-              Update
+              Edit
             </Button>
           </Form>
         )}
@@ -132,4 +119,4 @@ const EditUsers = () => {
   );
 };
 
-export default EditUsers;
+export default EditServices;
