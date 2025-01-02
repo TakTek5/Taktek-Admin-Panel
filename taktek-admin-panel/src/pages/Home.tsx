@@ -1,12 +1,17 @@
-import { Box, IconButton, Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import ContentWraper from "../components/ContentWraper";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
-    <Box sx={{display:"flex", margin:"auto"}}>
-      <Paper elevation={3}>
-        <Typography>Hola Mundo</Typography>
-      </Paper>
-    </Box>
+    <ContentWraper
+      name="Home"
+      onBack={() => navigate(-1)}
+      //  buttonFunction={() => navigate("/users/create")}
+    >
+      <Typography>Hola soy el home</Typography>
+    </ContentWraper>
   );
 };
 

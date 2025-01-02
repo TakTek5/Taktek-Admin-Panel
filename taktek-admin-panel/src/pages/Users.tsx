@@ -1,8 +1,8 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import ContentWraper from "../components/ContentWraper";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Edit, Label } from "@mui/icons-material";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -23,13 +23,29 @@ const Users = () => {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "firstName", headerName: "Name", flex: 1 },
+    { field: "lastName", headerName: "Name", flex: 1 },
     { field: "email", headerName: "Email", flex: 1 },
     { field: "phone", headerName: "Phone", flex: 1 },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Phone",
+      flex: 1,
+      getActions: (params) => {
+        return [
+          <GridActionsCellItem
+            icon={<Edit />}
+            label="Edit"
+            onClick={() => navigate(`/users/${params.id}`)}
+          />,
+        ];
+      },
+    },
   ];
 
   const rows = users;
-  const paginationModel = { page: 0, pageSize: 5 };
+  const paginationModel = { page: 0, pageSize: 10 };
 
   return (
     <ContentWraper
@@ -41,8 +57,9 @@ const Users = () => {
       <DataGrid
         rows={rows}
         columns={columns}
+        sx={{ width: "100%" }}
         initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
+        pageSizeOptions={[10, 20]}
       />
     </ContentWraper>
   );
