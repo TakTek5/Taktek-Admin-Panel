@@ -3,6 +3,6 @@ export class UpdateCompanyDto {
     email?: string;
     phone?: string;
     location?: string;
-    serviceId?: number;
+    serviceIds?: number[];
     amountDue?: number;
 }

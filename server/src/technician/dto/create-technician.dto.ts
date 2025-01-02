@@ -8,4 +8,5 @@ export class CreateTechnicianDto {
     companyId: number;
     status?: boolean;
     rating?: number;
+    serviceIds: number[];
 }
