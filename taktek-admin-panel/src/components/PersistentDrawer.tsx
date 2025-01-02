@@ -5,7 +5,6 @@ import {
   CssBaseline,
   Typography,
   styled,
-  useTheme,
   Divider,
   List,
   ListItemButton,
@@ -14,14 +13,8 @@ import {
 } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { useState } from "react";
-import {
-  Business,
-  ChevronLeft,
-  ChevronRight,
-  Home,
-  People,
-} from "@mui/icons-material";
+import { useState } from "react";
+import { Business, Home, People } from "@mui/icons-material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { useNavigate } from "react-router-dom";
 
@@ -88,16 +81,16 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const PersistentDrawer = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
+  // const theme = useTheme();
   const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  // const handleDrawerClose = () => {
+  //   setOpen(false);
+  // };
 
   const itemList = [
     { text: "Home", icon: <Home />, onClick: () => navigate("/") },
@@ -134,7 +127,7 @@ const PersistentDrawer = () => {
         </Toolbar>
       </AppBar>
       <Drawer
-        variant="persistent"
+        variant="permanent"
         anchor="left"
         open={open}
         sx={{
@@ -147,13 +140,13 @@ const PersistentDrawer = () => {
         }}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? <ChevronLeft /> : <ChevronRight />}
-          </IconButton>
+          </IconButton> */}
         </DrawerHeader>
         <Divider />
         <List>
-          {itemList.map((item, index) => {
+          {itemList.map((item) => {
             const { text, icon, onClick } = item;
             return (
               <ListItemButton key={text} onClick={onClick}>
