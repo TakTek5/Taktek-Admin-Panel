@@ -8,11 +8,15 @@ import Services from "./pages/Services";
 import { Box } from "@mui/material";
 import EditUsers from "./pages/Edit/EditUsers";
 import CreateUser from "./pages/Create/CreateUser";
+import EditServices from "./pages/Edit/EditServices";
+import { ToastContainer } from "react-toastify";
+import CreateService from "./pages/Create/CreateService";
 
 function App() {
   const drawerWidth = 240;
   return (
     <Box>
+       <ToastContainer />
       <PersistentDrawer />
       <Box
         sx={{
@@ -31,7 +35,11 @@ function App() {
           <Route path="/users/create" element={<CreateUser />} />
           <Route path="/users/:id" element={<EditUsers />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/create" element={<CreateService />} />
+          <Route path="/services/:id" element={<EditServices />} />
           <Route path="/companies" element={<ServiceProviders />} />
+          <Route path="/companies/create" element={<ServiceProviders />} />
+          <Route path="/companies/:id" element={<ServiceProviders />} />
         </Routes>
       </Box>
     </Box>
