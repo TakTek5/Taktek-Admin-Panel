@@ -19,9 +19,8 @@ model Company {
   email       String    @unique
   phone       String    @unique
   location    String
-  serviceId   Int
   amountDue   Float?    @default(0.0)
-  service     Service   @relation(fields: [serviceId],references: [id])
+  services    Service[] @relation("CompanyServices")
   technicians Technician[]
 }
 
@@ -39,6 +38,7 @@ model Technician {
   rating      Float?    @default(5.0)
   company     Company   @relation(fields: [companyId], references: [id])
   leads       Lead[]
+  services    Service[]     @relation("TechnicianServices")
 }
 
 model Review {
@@ -72,5 +72,6 @@ model Lead {
 model Service {
   id            Int             @id @default(autoincrement())
   serviceName   String
-  companies Company[]
+  companies     Company[]       @relation("CompanyServices")
+  technicians   Technician[]    @relation("TechnicianServices")
 }

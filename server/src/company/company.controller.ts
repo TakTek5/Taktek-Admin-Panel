@@ -35,4 +35,24 @@ export class CompanyController {
     const numericId = parseInt(id, 10);
     return this.companyService.remove(numericId);
   }
+
+  @Put(':companyId/services/:serviceId')
+  addServiceToCompany(
+    @Param('companyId') companyId: string,
+    @Param('serviceId') serviceId: string
+  ) {
+    const numericCompanyId = parseInt(companyId, 10);
+    const numericServiceId = parseInt(serviceId, 10);
+    return this.companyService.addServiceToCompany(numericCompanyId, numericServiceId);
+  }
+
+  @Delete(':companyId/services/:serviceId')
+  removeServiceFromCompany(
+    @Param('companyId') companyId: string,
+    @Param('serviceId') serviceId: string
+  ) {
+    const numericCompanyId = parseInt(companyId, 10);
+    const numericServiceId = parseInt(serviceId, 10);
+    return this.companyService.removeServiceFromCompany(numericCompanyId, numericServiceId);
+  }
 }

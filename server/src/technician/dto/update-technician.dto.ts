@@ -8,4 +8,5 @@ export class UpdateTechnicianDto {
     companyId?: number;
     status?: boolean;
     rating?: number;
+    serviceIds?: number[];
 }
