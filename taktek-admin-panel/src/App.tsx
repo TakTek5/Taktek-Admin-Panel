@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import PersistentDrawer from "./components/PersistentDrawer";
 import Users from "./pages/Users";
-import ServiceProviders from "./pages/ServiceProviders";
 import Services from "./pages/Services";
 import { Box } from "@mui/material";
 import EditUsers from "./pages/Edit/EditUsers";
@@ -11,6 +10,9 @@ import CreateUser from "./pages/Create/CreateUser";
 import EditServices from "./pages/Edit/EditServices";
 import { ToastContainer } from "react-toastify";
 import CreateService from "./pages/Create/CreateService";
+import Companies from "./pages/Companies";
+import EditCompany from "./pages/Edit/EditCompany";
+import EditTechnician from "./pages/Edit/EditTechnician";
 
 function App() {
   const drawerWidth = 240;
@@ -21,7 +23,6 @@ function App() {
       <Box
         sx={{
           width: `calc(100% - ${drawerWidth}px)`,
-          // marginLeft: `-${drawerWidth}px`,
           margin:"auto",
           minHeight:"100vh",
           display: "flex",
@@ -37,9 +38,9 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/services/create" element={<CreateService />} />
           <Route path="/services/:id" element={<EditServices />} />
-          <Route path="/companies" element={<ServiceProviders />} />
-          <Route path="/companies/create" element={<ServiceProviders />} />
-          <Route path="/companies/:id" element={<ServiceProviders />} />
+          <Route path="/companies" element={<Companies/>} />
+          <Route path="/companies/:companyId/technicians/:technicianId" element={<EditTechnician />} />
+          <Route path="/companies/:id" element={<EditCompany />} />
         </Routes>
       </Box>
     </Box>

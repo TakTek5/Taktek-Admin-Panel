@@ -101,9 +101,9 @@ const PersistentDrawer = () => {
       onClick: () => navigate("/services"),
     },
     {
-      text: "Service Providers",
+      text: "Companies",
       icon: <Business />,
-      onClick: () => navigate("/service-providers"),
+      onClick: () => navigate("/companies"),
     },
   ];
   return (

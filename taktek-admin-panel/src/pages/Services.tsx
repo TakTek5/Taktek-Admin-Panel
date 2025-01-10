@@ -3,7 +3,6 @@ import {
   GridActionsCellItem,
   GridColDef,
   GridRowId,
-  GridRowParams,
 } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import ContentWraper from "../components/ContentWraper";
