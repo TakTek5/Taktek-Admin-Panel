@@ -14,9 +14,10 @@ import {
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import { Business, Home, People } from "@mui/icons-material";
+import { Business, Home, Logout, People } from "@mui/icons-material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const drawerWidth = 240;
 
@@ -81,6 +82,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const PersistentDrawer = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth0();
   // const theme = useTheme();
   const [open, setOpen] = useState(true);
 
@@ -93,7 +95,7 @@ const PersistentDrawer = () => {
   // };
 
   const itemList = [
-    { text: "Home", icon: <Home />, onClick: () => navigate("/") },
+    { text: "Home", icon: <Home />, onClick: () => navigate("/home") },
     { text: "Users", icon: <People />, onClick: () => navigate("/users") },
     {
       text: "Services",
@@ -104,6 +106,11 @@ const PersistentDrawer = () => {
       text: "Companies",
       icon: <Business />,
       onClick: () => navigate("/companies"),
+    },
+    {
+      text: "Logout",
+      icon: <Logout />,
+      onClick: () => logout(),
     },
   ];
   return (
