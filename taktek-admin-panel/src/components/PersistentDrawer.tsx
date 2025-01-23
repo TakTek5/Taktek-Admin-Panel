@@ -17,7 +17,6 @@ import { useState } from "react";
 import { Business, Home, Logout, People } from "@mui/icons-material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 
 const drawerWidth = 240;
 
@@ -82,7 +81,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const PersistentDrawer = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth0();
   // const theme = useTheme();
   const [open, setOpen] = useState(true);
 
@@ -110,7 +108,7 @@ const PersistentDrawer = () => {
     {
       text: "Logout",
       icon: <Logout />,
-      onClick: () => logout(),
+      // onClick: () => logout(),
     },
   ];
   return (
