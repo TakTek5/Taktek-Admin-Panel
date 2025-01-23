@@ -1,9 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Button } from "@mui/material";
 
 const Login = () => {
-  const { loginWithRedirect } = useAuth0();
-
   return (
     <Box
       sx={{
@@ -23,9 +20,6 @@ const Login = () => {
         </Box>
         <Button
           variant="contained"
-          onClick={() => {
-            loginWithRedirect();
-          }}
           sx={{
             backgroundColor: "#88c124",
             color: "#000",
