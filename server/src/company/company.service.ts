@@ -10,13 +10,13 @@ export class CompanyService {
 
   async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
     try {
-      const { serviceIds, ...companyData } = createCompanyDto;
+      const { services, ...companyData } = createCompanyDto;
 
       return this.prisma.company.create({
         data: {
           ...companyData,
           services: {
-            connect: serviceIds.map((id) => ({ id })),
+            connect: services.map((id) => ({ id })),
           },
         },
         include: { services: true },
@@ -32,7 +32,7 @@ export class CompanyService {
     });
   }
 
-  async findOne(id: number): Promise<Company> {
+  async findOne(id: string): Promise<Company> {
     const company = await this.prisma.company.findUnique({
       where: { id },
       include: { services: true, technicians: true },
@@ -43,18 +43,18 @@ export class CompanyService {
     return company;
   }
 
-  async update(id: number, updateCompanyDto: UpdateCompanyDto): Promise<Company> {
+  async update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<Company> {
     try {
-      const { serviceIds, ...companyData } = updateCompanyDto;
+      const { services, ...companyData } = updateCompanyDto;
 
       const company = await this.prisma.company.findUnique({ where: { id } });
       if (!company) {
         throw new NotFoundException(`Company with ID ${id} not found`);
       }
 
-      const serviceUpdateData = serviceIds
+      const serviceUpdateData = services
       ? {
-          set: serviceIds.map((id) => ({ id })),
+          set: services.map((id) => ({ id })),
         }
       : undefined;
 
@@ -71,7 +71,7 @@ export class CompanyService {
     }
   }
 
-  async remove(id: number): Promise<Company> {
+  async remove(id: string): Promise<Company> {
     const company = await this.prisma.company.findUnique({ where: { id } });
     if (!company) {
       throw new NotFoundException(`Company with ID ${id} not found`);
@@ -79,7 +79,7 @@ export class CompanyService {
     return this.prisma.company.delete({ where: { id } });
   }
 
-  async addServiceToCompany(companyId: number, serviceId: number): Promise<Company> {
+  async addServiceToCompany(companyId: string, serviceId: number): Promise<Company> {
     const company = await this.prisma.company.findUnique({ where: { id: companyId } });
     if (!company) {
       throw new NotFoundException(`Company with ID ${companyId} not found`);
@@ -96,7 +96,7 @@ export class CompanyService {
     });
   }
 
-  async removeServiceFromCompany(companyId: number, serviceId: number): Promise<Company> {
+  async removeServiceFromCompany(companyId: string, serviceId: number): Promise<Company> {
     const company = await this.prisma.company.findUnique({ where: { id: companyId } });
     if (!company) {
       throw new NotFoundException(`Company with ID ${companyId} not found`);

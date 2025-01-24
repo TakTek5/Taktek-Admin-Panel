@@ -16,14 +16,14 @@ export class UserService {
 
   async findAll(): Promise<User[]> {
     return this.prisma.user.findMany({
-      include: { leads: true },
+      include: { reviews: true, calls: true, jobs: true },
     });
   }
 
   async findOne(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { leads: true },
+      include: { reviews: true, calls: true, jobs: true },
     });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -39,6 +39,7 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: updateUserDto,
+      include: { reviews: true, calls: true, jobs: true },
     });
   }
 

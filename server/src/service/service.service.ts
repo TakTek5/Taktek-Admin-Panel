@@ -13,13 +13,16 @@ export class ServiceService {
   }
 
   async findAll(): Promise<Service[]> {
-    return this.prisma.service.findMany({include: {
-      companies: true,
-    },});
+    return this.prisma.service.findMany({
+      include: { companies: true },
+    });
   }
 
   async findOne(id: number): Promise<Service> {
-    const service = await this.prisma.service.findUnique({ where: { id }, include: { companies: true }, });
+    const service = await this.prisma.service.findUnique({
+      where: { id },
+      include: { companies: true },
+    });
     if (!service) {
       throw new NotFoundException(`Service with ID ${id} not found`);
     }
@@ -27,10 +30,7 @@ export class ServiceService {
   }
 
   async update(id: number, updateServiceDto: UpdateServiceDto): Promise<Service> {
-    const service = await this.prisma.service.findUnique({ where: { id } });
-    if (!service) {
-      throw new NotFoundException(`Service with ID ${id} not found`);
-    }
+    await this.findOne(id); // Check if the service exists before updating
     return this.prisma.service.update({
       where: { id },
       data: updateServiceDto,
@@ -38,10 +38,7 @@ export class ServiceService {
   }
 
   async remove(id: number): Promise<Service> {
-    const service = await this.prisma.service.findUnique({ where: { id } });
-    if (!service) {
-      throw new NotFoundException(`Service with ID ${id} not found`);
-    }
+    await this.findOne(id); // Check if the service exists before deleting
     return this.prisma.service.delete({ where: { id } });
   }
 }

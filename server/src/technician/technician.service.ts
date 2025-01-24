@@ -10,7 +10,7 @@ export class TechnicianService {
 
   async create(createTechnicianDto: CreateTechnicianDto): Promise<Technician> {
     try {
-      const { companyId, serviceIds, ...technicianData } = createTechnicianDto;
+      const { companyId, services, ...technicianData } = createTechnicianDto;
 
       const company = await this.prisma.company.findUnique({
         where: { id: companyId },
@@ -22,7 +22,7 @@ export class TechnicianService {
       }
     
       const validServiceIds = company.services.map(service => service.id);
-      const invalidServiceIds = serviceIds.filter(id => !validServiceIds.includes(id));
+      const invalidServiceIds = services.filter(id => !validServiceIds.includes(id));
     
       if (invalidServiceIds.length > 0) {
         throw new BadRequestException(
@@ -35,7 +35,7 @@ export class TechnicianService {
           ...technicianData,
           company: { connect: { id: companyId } },
           services: {
-            connect: serviceIds.map(id => ({ id })),
+            connect: services.map(id => ({ id })),
           },
         },
         include: { services: true },
@@ -47,14 +47,14 @@ export class TechnicianService {
 
   async findAll(): Promise<Technician[]> {
     return this.prisma.technician.findMany({
-      include: { services:true, company: { include: { services: true }}, reviews: true, leads: true },
+      include: { services:true, company: { include: { services: true }}, reviews: true, jobs: true, calls: true },
     });
   }
 
   async findOne(id: number): Promise<Technician> {
     const technician = await this.prisma.technician.findUnique({
       where: { id },
-      include: { services: true, company: { include: { services: true }}, reviews: true, leads: true },
+      include: { services: true, company: { include: { services: true }}, reviews: true, jobs: true, calls: true },
     });
     if (!technician) {
       throw new NotFoundException(`Technician with ID ${id} not found`);
@@ -66,16 +66,16 @@ export class TechnicianService {
     return this.prisma.technician.findMany({
       where: { services: {
         some: { id: serviceId }
-      } , status: true },
+      } , available: true },
       include: { company: {
         include: { services: true }
-      }, reviews: true, leads: true },
+      }, reviews: true, jobs: true, calls: true },
     });
   }
 
   async update(id: number, updateTechnicianDto: UpdateTechnicianDto): Promise<Technician> {
     try{
-      const { serviceIds, ...technicianData } = updateTechnicianDto;
+      const { services, ...technicianData } = updateTechnicianDto;
     
       const technician = await this.prisma.technician.findUnique({
         where: { id },
@@ -92,9 +92,9 @@ export class TechnicianService {
         throw new NotFoundException(`Technician with ID ${id} is not associated with a company`);
       }
     
-      if (serviceIds) {
+      if (services) {
         const validServiceIds = company.services.map((service) => service.id);
-        const invalidServiceIds = serviceIds.filter((id) => !validServiceIds.includes(id));
+        const invalidServiceIds = services.filter((id) => !validServiceIds.includes(id));
     
         if (invalidServiceIds.length > 0) {
           throw new Error(
@@ -103,9 +103,9 @@ export class TechnicianService {
         }
       }
 
-      const serviceUpdateData = serviceIds
+      const serviceUpdateData = services
       ? {
-        set: serviceIds.map((id) => ({ id })),
+        set: services.map((id) => ({ id })),
       }
       : undefined;
 
