@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,19 +20,16 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    const numericId = parseInt(id, 10);
-    return this.userService.findOne(numericId);
+    return this.userService.findOne(parseInt(id));
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const numericId = parseInt(id, 10);
-    return this.userService.update(numericId, updateUserDto);
+    return this.userService.update(parseInt(id), updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    const numericId = parseInt(id, 10);
-    return this.userService.remove(numericId);
+    return this.userService.remove(parseInt(id));
   }
 }

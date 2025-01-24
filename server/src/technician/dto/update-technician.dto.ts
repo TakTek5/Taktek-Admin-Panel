@@ -1,12 +1,5 @@
-export class UpdateTechnicianDto {
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    phone?: string;
-    photo?: string;
-    location?: { lat: number; long: number };
-    companyId?: number;
-    status?: boolean;
-    rating?: number;
-    serviceIds?: number[];
-}
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateTechnicianDto } from './create-technician.dto';
+import { IsOptional, IsArray, ArrayNotEmpty, IsInt } from 'class-validator';
+
+export class UpdateTechnicianDto extends PartialType(CreateTechnicianDto) {}

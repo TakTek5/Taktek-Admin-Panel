@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Service } from '@prisma/client';
 import { CreateServiceDto } from './dto/create-service.dto';
@@ -9,30 +9,30 @@ export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
   @Post()
-  create(@Body() createServiceDto: CreateServiceDto) {
+  create(@Body() createServiceDto: CreateServiceDto): Promise<Service> {
     return this.serviceService.create(createServiceDto);
   }
 
   @Get()
-  async findAll(): Promise<Service[]> {
+  findAll(): Promise<Service[]> {
     return this.serviceService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const numericId = parseInt(id, 10);
-    return this.serviceService.findOne(numericId);
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Service> {
+    return this.serviceService.findOne(id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
-    const numericId = parseInt(id, 10);
-    return this.serviceService.update(numericId, updateServiceDto);
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateServiceDto: UpdateServiceDto
+  ): Promise<Service> {
+    return this.serviceService.update(id, updateServiceDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    const numericId = parseInt(id, 10);
-    return this.serviceService.remove(numericId);
+  remove(@Param('id', ParseIntPipe) id: number): Promise<Service> {
+    return this.serviceService.remove(id);
   }
 }
