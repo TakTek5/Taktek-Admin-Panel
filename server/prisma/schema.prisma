@@ -14,64 +14,126 @@ datasource db {
 }
 
 model Company {
-  id          Int       @id @default(autoincrement())
+  id          String       @id @default(uuid())
   name        String
   email       String    @unique
-  phone       String    @unique
-  location    String
+  password    String
+  address     String
+  city        String
+  zipCode     String
+  businessReg String?     @default("")
+  driverLicense String?   @default("")
+  driverLicenseExpDate  String?   @default("")
+  insurance   String?   @default("")
+  insuranceExpDate String?   @default("")
+  license     String?   @default("")
   amountDue   Float?    @default(0.0)
   services    Service[] @relation("CompanyServices")
   technicians Technician[]
+  reviews     CompanyReview[]
+  agents      Agent[]
 }
 
 model Technician {
   id          Int       @id @default(autoincrement())
+  verified    Boolean?  @default(false)
   firstName   String
   lastName    String
   email       String    @unique
-  phone       String    @unique
-  photo       String
-  location    Json?
-  companyId   Int
-  status      Boolean   @default(true)
-  reviews     Review[]
+  password    String
+  photo       String?   @default("")
+  companyId   String
+  available   Boolean?   @default(true)
+  license     String?   @default("")
+  licenseExpDate String?   @default("")
+  reviews     TechnicianReview[]
   rating      Float?    @default(5.0)
   company     Company   @relation(fields: [companyId], references: [id])
-  leads       Lead[]
-  services    Service[]     @relation("TechnicianServices")
+  jobs        Job[]
+  calls       Call[]
+  services    Service[]  @relation("TechnicianServices")
 }
 
-model Review {
+model TechnicianReview {
   id              Int       @id @default(autoincrement())
-  description     String
+  description     String?   @default("")
+  rating          Float     @default(5.0)
+  technicianId    Int
+  technician      Technician @relation(fields: [technicianId], references: [id])
+}
+
+model CompanyReview {
+  id              Int       @id @default(autoincrement())
+  description     String?   @default("")
+  rating          Float     @default(5.0)
+  companyId       String
+  company         Company @relation(fields: [companyId], references: [id])
+}
+
+model UserReview {
+  id              Int       @id @default(autoincrement())
+  description     String?   @default("")
   rating          Float  @default(5.0)
-  technicianId Int
-  technician Technician @relation(fields: [technicianId], references: [id])
+  userId          Int
+  user            User @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  firstName  String
-  lastName   String
-  email      String @unique
-  phone      String @unique
-  location   Json?
-  leads Lead[]
+  id          Int    @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String @unique
+  phone       String @unique
+  password    String
+  photo       String?    @default("")
+  jobs        Job[]
+  calls       Call[]
+  reviews     UserReview[]
 }
 
-model Lead {
+model Call {
   id               Int             @id @default(autoincrement())
+  date             DateTime?       @default(now())
   userId           Int
   technicianId     Int
-  location         String
-  date             DateTime?       @default(now())
   user             User            @relation(fields: [userId], references: [id])
-  technician  Technician @relation(fields: [technicianId], references: [id])
+  technician       Technician      @relation(fields: [technicianId], references: [id])
 }
 
 model Service {
   id            Int             @id @default(autoincrement())
-  serviceName   String
+  name          String
+  categoryId    Int
+  category      Category        @relation(fields: [categoryId], references: [id])
   companies     Company[]       @relation("CompanyServices")
   technicians   Technician[]    @relation("TechnicianServices")
+  jobs          Job[]
+}
+
+model Category {
+  id            Int             @id @default(autoincrement())
+  name          String
+  services      Service[]
+}
+
+model Job {
+  id            Int             @id @default(autoincrement())
+  date          DateTime?        @default(now())
+  completed     Boolean?         @default(false)
+  userId        Int
+  technicianId  Int
+  serviceId     Int
+  user          User            @relation(fields: [userId], references: [id])
+  technician    Technician      @relation(fields: [technicianId], references: [id])
+  service       Service         @relation(fields: [serviceId], references: [id])
+}
+
+model Agent {
+  id            Int         @id @default(autoincrement())
+  companyId     String
+  firstName     String
+  lastName      String
+  email         String      @unique
+  password      String
+  company       Company     @relation(fields: [companyId], references: [id])
 }

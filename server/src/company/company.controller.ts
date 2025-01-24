@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { Company } from '@prisma/client';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -20,30 +20,26 @@ export class CompanyController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    const numericId = parseInt(id, 10);
-    return this.companyService.findOne(numericId);
+    return this.companyService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    const numericId = parseInt(id, 10);
-    return this.companyService.update(numericId, updateCompanyDto);
+    return this.companyService.update(id, updateCompanyDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    const numericId = parseInt(id, 10);
-    return this.companyService.remove(numericId);
+    return this.companyService.remove(id);
   }
 
-  @Put(':companyId/services/:serviceId')
+  @Patch(':companyId/services/:serviceId')
   addServiceToCompany(
     @Param('companyId') companyId: string,
     @Param('serviceId') serviceId: string
   ) {
-    const numericCompanyId = parseInt(companyId, 10);
     const numericServiceId = parseInt(serviceId, 10);
-    return this.companyService.addServiceToCompany(numericCompanyId, numericServiceId);
+    return this.companyService.addServiceToCompany(companyId, numericServiceId);
   }
 
   @Delete(':companyId/services/:serviceId')
@@ -51,8 +47,7 @@ export class CompanyController {
     @Param('companyId') companyId: string,
     @Param('serviceId') serviceId: string
   ) {
-    const numericCompanyId = parseInt(companyId, 10);
     const numericServiceId = parseInt(serviceId, 10);
-    return this.companyService.removeServiceFromCompany(numericCompanyId, numericServiceId);
+    return this.companyService.removeServiceFromCompany(companyId, numericServiceId);
   }
 }

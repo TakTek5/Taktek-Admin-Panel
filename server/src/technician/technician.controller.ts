@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body } from '@nestjs/common';
 import { TechnicianService } from './technician.service';
 import { Technician } from '@prisma/client';
 import { CreateTechnicianDto } from './dto/create-technician.dto';
@@ -30,7 +30,7 @@ export class TechnicianController {
     return this.technicianService.findByService(numericId);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateTechnicianDto: UpdateTechnicianDto,

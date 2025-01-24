@@ -1,3 +1,11 @@
+import { IsString, IsInt, IsNotEmpty } from 'class-validator';
+
 export class CreateServiceDto {
-  serviceName: string;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsInt()
+  @IsNotEmpty()
+  categoryId: number;
 }
