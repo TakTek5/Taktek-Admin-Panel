@@ -17,32 +17,9 @@ import { useState } from "react";
 import { Business, Home, Logout, People } from "@mui/icons-material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../App";
 
 const drawerWidth = 240;
-
-// const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
-//   open?: boolean;
-// }>(({ theme }) => ({
-//   flexGrow: 1,
-//   padding: theme.spacing(3),
-//   transition: theme.transitions.create("margin", {
-//     easing: theme.transitions.easing.sharp,
-//     duration: theme.transitions.duration.leavingScreen,
-//   }),
-//   marginLeft: `-${drawerWidth}px`,
-//   variants: [
-//     {
-//       props: ({ open }) => open,
-//       style: {
-//         transition: theme.transitions.create("margin", {
-//           easing: theme.transitions.easing.easeOut,
-//           duration: theme.transitions.duration.enteringScreen,
-//         }),
-//         marginLeft: 0,
-//       },
-//     },
-//   ],
-// }));
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -80,6 +57,10 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const PersistentDrawer = () => {
+  const { setSignedIn } = useAuth();
+  const logout = () => {
+    setSignedIn(false);
+  };
   const navigate = useNavigate();
   // const theme = useTheme();
   const [open, setOpen] = useState(true);
@@ -108,7 +89,7 @@ const PersistentDrawer = () => {
     {
       text: "Logout",
       icon: <Logout />,
-      // onClick: () => logout(),
+      onClick: () => logout(),
     },
   ];
   return (
